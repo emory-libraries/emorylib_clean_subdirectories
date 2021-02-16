@@ -1,31 +1,48 @@
-Role Name
+emorylib_clean_subdirectories
 =========
 
-A brief description of the role goes here.
+Search for and delete subdirectories older than a specified number of days. This role will only delete directories, not files. Will build a report, including when no directories are deleted, and output it to console and optionally Slack.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+Must have a valid Slack token if using optional Slack feature.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+```yaml
+### Main variables
+subdirectories_paths: # Required, list, --File paths to check for older subdirectories
+subdirectories_age: # Required, integer --Find any subdirectories that have not been modified in these many days
 
-Dependencies
-------------
-
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+### Optional Slack variables
+clean_subdir_slack_token:
+clean_subdir_slack_msg:
+clean_subdir_slack_channel:
+clean_subdir_slack_color:
+clean_subdir_slack_thread_id:
+clean_subdir_slack_username:
+clean_subdir_slack_icon_url:
+clean_subdir_slack_icon_emoji:
+clean_subdir_slack_link_names:
+clean_subdir_slack_parse:
+```
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+```yaml
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+  - hosts: server
+    vars:
+      subdirectories_paths: 
+        - /path/to/first/dir
+        - /path/to/second/dir
+      subdirectories_age: 3
+    tasks:
+      - include_role: emorylib_clean_subdirectories
+```
 
 License
 -------
